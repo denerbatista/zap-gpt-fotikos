@@ -60,11 +60,14 @@ COPY . /app/
 # Expor a porta do aplicativo
 EXPOSE 3000
 
-# Comando para configurar as permissões e construir o aplicativo
-RUN mkdir -p /app/dist && chown -R node:node /app/dist && npm run build
 
 # Altere o usuário padrão para 'node'
 USER node
+
+# Comando para configurar as permissões e construir o aplicativo
+RUN mkdir -p /app/dist && chown -R node:node /app/dist && npm run build
+
+# Comando para construir o aplicativo
 RUN npm run build
 
 # Configuração das variáveis de ambiente
