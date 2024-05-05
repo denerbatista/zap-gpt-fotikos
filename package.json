@@ -17,9 +17,6 @@
   },
   "license": "MIT",
   "type": "module",
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",
     "@wppconnect-team/wppconnect": "1.30.3",
