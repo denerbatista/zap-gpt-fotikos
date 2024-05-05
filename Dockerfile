@@ -73,4 +73,4 @@ ENV GEMINI_KEY=$GEMINI_KEY
 ENV GEMINI_PROMPT=$GEMINI_PROMPT
 
 # Comando para iniciar o aplicativo
-CMD ["npm", "start"]
+CMD ["npm", "start", "--", "--no-sandbox"]
