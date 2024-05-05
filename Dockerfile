@@ -74,6 +74,13 @@ RUN chown -R myuser:myuser /app
 # Comando para construir o aplicativo (modificado)
 RUN su myuser -c "npm run build"
 
+# Defina as permissões para o Chrome
+RUN chown myuser:myuser /usr/bin/google-chrome
+
+# Adicione uma etapa para criar o arquivo Last Browser
+RUN mkdir -p /app/tokens/sessionName \
+    && echo "/usr/bin/google-chrome/chrome.exe" > /app/tokens/sessionName/Last\ Browser
+
 # Expor a porta do aplicativo
 EXPOSE 3000
 
