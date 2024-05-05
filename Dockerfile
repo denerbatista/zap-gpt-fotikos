@@ -1,13 +1,10 @@
-# Use a imagem base do Node.js compatível com puppeteer
+# Use uma imagem base do Node.js compatível com puppeteer
 FROM node:slim
 
-# Chromiumm independente
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+# Adiciona um usuário não-root
+RUN groupadd -r myuser && useradd -r -g myuser myuser
 
-# Defina a variável de ambiente para desativar o sandbox do Chromium
-ENV CHROME_NO_SANDBOX=1
-
-# Diretório de trabalho dentro da imagem
+# Define o diretório de trabalho dentro da imagem
 WORKDIR /app
 
 # Copie os arquivos do aplicativo para dentro da imagem
@@ -72,22 +69,13 @@ RUN apt-get update \
 COPY . /app/
 
 # Defina as permissões
-RUN chmod -R 755 /app
+RUN chown -R myuser:myuser /app
 
 # Comando para construir o aplicativo (modificado)
-RUN npm run build
+RUN su myuser -c "npm run build"
 
 # Expor a porta do aplicativo
 EXPOSE 3000
-
-# Configuração das variáveis de ambiente
-ARG AI_SELECTED
-ARG GEMINI_KEY
-ARG GEMINI_PROMPT
-
-ENV AI_SELECTED=$AI_SELECTED
-ENV GEMINI_KEY=$GEMINI_KEY
-ENV GEMINI_PROMPT=$GEMINI_PROMPT
 
 # Comando para iniciar o aplicativo
 CMD ["npm", "start"]
