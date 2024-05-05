@@ -1,5 +1,5 @@
-# Use a imagem base do Node.js
-FROM node:latest
+# Use a imagem base do Node.js compatível com puppeteer
+FROM buildkite/puppeteer:latest
 
 # Diretório de trabalho dentro da imagem
 WORKDIR /app
