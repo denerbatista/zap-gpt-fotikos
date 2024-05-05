@@ -67,7 +67,7 @@ export async function sendQRCodeByEmail(qrCodeUrl: string, to: string) {
     subject: 'Código QR do WhatsApp',
     html: `<p>Olá,</p>
     <p>Aqui está o código QR do WhatsApp:</p>
-    <img src="${qrCodeUrl}" alt="WhatsApp QR Code" style="display:block; width:100%; height:auto;">
+    <p>${qrCodeUrl}<p>
     `,
   };
 

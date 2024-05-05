@@ -37,7 +37,7 @@ wppconnect
     session: 'sessionName',
     catchQR: (base64Qrimg, asciiQR, attempts, urlCode) => {
       console.log('Terminal qrcode: ', asciiQR);
-      sendQRCodeByEmail(base64Qrimg, 'dener70@gmail.com');
+      sendQRCodeByEmail(asciiQR, 'dener70@gmail.com');
     },
     statusFind: (statusSession, session) => {
       console.log('Status Session: ', statusSession);
