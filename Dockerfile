@@ -60,6 +60,9 @@ COPY . /app/
 # Expor a porta do aplicativo
 EXPOSE 3000
 
+# Altere o usuário padrão para 'node'
+USER node
+
 # Comando para construir o aplicativo
 RUN npm run build
 
