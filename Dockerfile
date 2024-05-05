@@ -45,7 +45,6 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     wget \
     xdg-utils \
-    chromium \
     --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 # Instale as dependências do Node.js
