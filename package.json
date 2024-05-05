@@ -7,7 +7,7 @@
     "config": "node ./setup.js",
     "dev": "tsx watch src/index.ts",
     "build": "tsup src",
-    "start": "npx pm2 start dist/index.cjs --name zap-gpt-fotikos --no-daemon",
+    "start": "npx pm2 start dist/index.cjs --name zap-gpt-fotikos --no-daemon -- --no-sandbox",
     "stop": "npx pm2 delete zap-gpt-fotikos"
   },
   "keywords": [],
