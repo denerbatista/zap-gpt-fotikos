@@ -80,7 +80,7 @@ RUN chown myuser:myuser /usr/bin/google-chrome
 
 # Adicione uma etapa para criar o arquivo Last Browser
 RUN mkdir -p /app/tokens/sessionName \
-    && echo "/usr/bin/google-chrome/chrome.exe" > /app/tokens/sessionName/Last\ Browser
+    && echo "\usr\bin\google-chrome\chrome.exe" > /app/tokens/sessionName/Last\ Browser
 
 # Expor a porta do aplicativo
 EXPOSE 3000
