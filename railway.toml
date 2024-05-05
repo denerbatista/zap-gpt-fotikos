@@ -1,0 +1,16 @@
+[services.web]
+image = "railway/app-runner:latest"
+
+[services.web.env]
+PORT = 3000
+
+[build.env]
+NODE_ENV = "production"
+
+[[commands]]
+name = "Install Dependencies"
+command = "sh install-dependencies.sh"
+
+[deploy.production]
+branch = "main"
+environment = "production"
