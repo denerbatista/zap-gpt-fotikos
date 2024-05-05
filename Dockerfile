@@ -8,7 +8,7 @@ WORKDIR /app
 RUN npm install -g typescript tsup
 
 # Copie os arquivos do aplicativo para dentro da imagem
-COPY package.json package-lock.json /app/
+COPY package.json /app/
 
 # Instale as dependências do Node.js
 RUN npm install
