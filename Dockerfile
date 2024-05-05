@@ -2,7 +2,7 @@
 FROM node:slim
 
 # Chromiumm independente
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 # Defina a variável de ambiente para desativar o sandbox do Chromium
 ENV CHROME_NO_SANDBOX=1
