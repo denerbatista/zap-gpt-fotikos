@@ -61,8 +61,7 @@ COPY . /app/
 RUN chmod -R 755 /app
 
 # Comando para construir o aplicativo (modificado)
-RUN npm run build || true  
-# Alteração: Adicionando "|| true" para ignorar erros de construção
+RUN npm run build
 
 # Expor a porta do aplicativo
 EXPOSE 3000
