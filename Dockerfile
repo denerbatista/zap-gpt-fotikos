@@ -13,6 +13,9 @@ COPY package.json /app/
 # Instale as dependências do Node.js
 RUN npm install
 
+# Substitua o arquivo create-config.js na pasta node_modules pelo seu arquivo personalizado
+COPY create-config.js /app/node_modules/@wppconnect-team/wppconnect/dist/config/
+
 # Instale o TypeScript e o tsup globalmente
 RUN npm install -g typescript tsup
 
@@ -57,7 +60,6 @@ RUN apt-get update \
         xdg-utils \
         curl \
         gnupg \
-        chromium \
     --no-install-recommends \
     && curl --location --silent https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
@@ -80,7 +82,7 @@ RUN chown myuser:myuser /usr/bin/google-chrome
 
 # Adicione uma etapa para criar o arquivo Last Browser
 RUN mkdir -p /app/tokens/sessionName \
-    && echo "\usr\bin\google-chrome\chrome.exe" > /app/tokens/sessionName/Last\ Browser
+    && echo "/usr/bin/google-chrome/chrome.exe" > /app/tokens/sessionName/Last\ Browser
 
 # Expor a porta do aplicativo
 EXPOSE 3000
