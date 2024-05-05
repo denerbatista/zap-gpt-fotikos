@@ -1,5 +1,5 @@
 {
-  "name": "zap-gpt",
+  "name": "zap-gpt-fotikos",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
@@ -7,13 +7,13 @@
     "config": "node ./setup.js",
     "dev": "tsx watch src/index.ts",
     "build": "tsup src",
-    "start": "npm run build && npx pm2 start dist/index.cjs --name zap-gpt --no-daemon",
+    "start": "npm run build && npx pm2 start dist/index.cjs --name zap-gpt-fotikos --no-daemon",
     "stop": "npx pm2 delete zap-gpt"
   },
   "keywords": [],
   "author": {
-    "name": "Marcus Gonçalves",
-    "email": "marcusgoncalves067@gmail.com"
+    "name": "Dener Batista",
+    "email": "dener70@gmail.com"
   },
   "license": "MIT",
   "type": "module",
