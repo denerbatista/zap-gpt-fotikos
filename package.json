@@ -7,7 +7,7 @@
     "config": "node ./setup.js",
     "dev": "tsx watch src/index.ts",
     "build": "npx esbuild --platform=node --format=cjs --outdir=dist src/index.ts",
-    "start": "npx pm2 start dist/index.js --name zap-gpt-fotikos --no-daemon",
+    "start": "npx pm2 start dist/index.cjs --name zap-gpt-fotikos --no-daemon",
     "stop": "npx pm2 delete zap-gpt-fotikos"
   },
   "keywords": [],
@@ -16,7 +16,7 @@
     "email": "dener70@gmail.com"
   },
   "license": "MIT",
-  "type": "module",
+  "type": "commonjs",
   "engines": {
     "node": ">=18.0.0"
   },
