@@ -58,7 +58,8 @@ RUN apt-get update && apt-get install -y \
 COPY . /app/
 
 # Comando para construir o aplicativo (modificado)
-RUN npm run build || true  # Alteração: Adicionando "|| true" para ignorar erros de construção
+RUN npm run build || true  
+# Alteração: Adicionando "|| true" para ignorar erros de construção
 
 # Defina as permissões do diretório dist
 RUN chmod -R 755 /app/dist
