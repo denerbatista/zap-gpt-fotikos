@@ -4,6 +4,9 @@ FROM buildkite/puppeteer:latest
 # Diretório de trabalho dentro da imagem
 WORKDIR /app
 
+# Instale o TypeScript e o tsup globalmente
+RUN npm install -g typescript tsup
+
 # Copie os arquivos do aplicativo para dentro da imagem
 COPY package.json package-lock.json /app/
 
@@ -50,13 +53,6 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     chromium \
     --no-install-recommends && rm -rf /var/lib/apt/lists/*
-
-# Instale as dependências do Node.js
-# RUN npm ci --only=production
-
-
-# Instale o TypeScript e o tsup globalmente
-RUN npm install -g typescript tsup
 
 # Copie o restante dos arquivos do aplicativo
 COPY . /app/
