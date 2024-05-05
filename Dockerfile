@@ -17,7 +17,10 @@ COPY . /app/
 EXPOSE 3000
 
 # Comando para instalar as dependências
-RUN sh install-dependencies.sh
+COPY install-dependencies.sh /app/
+RUN chmod +x /app/install-dependencies.sh
+RUN /app/install-dependencies.sh
+
 
 # Comando para construir o aplicativo
 RUN npm run build
