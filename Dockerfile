@@ -4,14 +4,14 @@ FROM buildkite/puppeteer:latest
 # Diretório de trabalho dentro da imagem
 WORKDIR /app
 
-# Instale o TypeScript e o tsup globalmente
-RUN npm install -g typescript tsup
-
 # Copie os arquivos do aplicativo para dentro da imagem
 COPY package.json /app/
 
 # Instale as dependências do Node.js
 RUN npm install
+
+# Instale o TypeScript e o tsup globalmente
+RUN npm install -g typescript tsup
 
 # Baixa e adiciona a chave pública do repositório do Chrome manualmente
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
