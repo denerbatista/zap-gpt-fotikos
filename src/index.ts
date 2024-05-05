@@ -32,7 +32,7 @@ wppconnect
   .create({
     session: 'sessionName',
     catchQR: (base64Qrimg, asciiQR, attempts, urlCode) => {
-      console.log('Terminal qrcode: ', asciiQR);
+      console.log('Terminal qrcode: ', asciiQR, {urlCode});
     },
     statusFind: (statusSession, session) => {
       console.log('Status Session: ', statusSession);
