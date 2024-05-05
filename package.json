@@ -6,7 +6,7 @@
   "scripts": {
     "config": "node ./setup.js",
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src",
+    "build": "npx esbuild --platform=node --format=cjs --outdir=dist src/index.ts",
     "start": "npx pm2 start dist/index.cjs --name zap-gpt-fotikos --no-daemon",
     "stop": "npx pm2 delete zap-gpt-fotikos"
   },
@@ -33,6 +33,7 @@
   "devDependencies": {
     "@types/node": "^20.11.8",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "esbuild": "^0.20.2",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
