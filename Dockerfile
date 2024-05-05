@@ -54,6 +54,9 @@ RUN apt-get update && apt-get install -y \
 # Instale as dependências do Node.js
 # RUN npm ci --only=production
 
+# Copie o restante dos arquivos do aplicativo
+COPY . /app/
+
 # Defina as permissões do diretório dist
 RUN chmod -R 755 /app/dist
 
