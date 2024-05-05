@@ -50,8 +50,8 @@ RUN apt-get update && apt-get install -y \
 # Instale as dependências do Node.js
 RUN npm ci --only=production
 
-# Instale tsup globalmente
-RUN npm install -g tsup
+# Instale o TypeScript e o tsup globalmente
+RUN npm install -g typescript tsup
 
 # Copie o restante dos arquivos do aplicativo
 COPY . /app/
