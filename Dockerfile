@@ -57,16 +57,15 @@ RUN apt-get update && apt-get install -y \
 # Copie o restante dos arquivos do aplicativo
 COPY . /app/
 
+# Defina as permissões
+RUN chmod -R 755 /app
+
 # Comando para construir o aplicativo (modificado)
 RUN npm run build || true  
 # Alteração: Adicionando "|| true" para ignorar erros de construção
 
-# Defina as permissões do diretório dist
-RUN chmod -R 755 /app/dist
-
 # Expor a porta do aplicativo
 EXPOSE 3000
-
 
 # Configuração das variáveis de ambiente
 ARG AI_SELECTED
