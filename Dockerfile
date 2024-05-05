@@ -54,17 +54,15 @@ RUN apt-get update && apt-get install -y \
 # Instale as dependências do Node.js
 # RUN npm ci --only=production
 
-# Copie o restante dos arquivos do aplicativo
-COPY . /app/
-
-# Defina as permissões do diretório dist
-RUN chmod -R 755 /app/dist
 
 # Instale o TypeScript e o tsup globalmente
 RUN npm install -g typescript tsup
 
 # Copie o restante dos arquivos do aplicativo
 COPY . /app/
+
+# Defina as permissões do diretório dist
+RUN chmod -R 755 /app/dist
 
 # Expor a porta do aplicativo
 EXPOSE 3000
