@@ -16,9 +16,6 @@ RUN npm install
 # Instale o TypeScript e o tsup globalmente
 RUN npm install -g typescript tsup
 
-# Baixa e adiciona a chave pública do repositório do Chrome manualmente
-RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
-
 # Instale as dependências do sistema
 RUN apt-get update && apt-get install -y \
     libnss3 \
