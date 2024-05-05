@@ -1,5 +1,8 @@
 # Use a imagem base do Node.js compatível com puppeteer
-FROM buildkite/puppeteer:latest
+FROM node:slim
+
+# Chromiumm independente
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
 # Diretório de trabalho dentro da imagem
 WORKDIR /app
