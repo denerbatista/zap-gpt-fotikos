@@ -24,11 +24,13 @@
     "csv-stringify": "^6.4.5",
     "dotenv": "^16.3.2",
     "inquirer": "^9.2.15",
+    "nodemailer": "^6.9.13",
     "openai": "^4.24.2",
     "sharp": "^0.33.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.8",
+    "@types/nodemailer": "^6.4.15",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",

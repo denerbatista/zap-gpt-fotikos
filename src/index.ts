@@ -2,7 +2,11 @@ import wppconnect from '@wppconnect-team/wppconnect';
 
 import dotenv from 'dotenv';
 import { initializeNewAIChatSession, mainOpenAI } from './service/openai';
-import { splitMessages, sendMessagesWithDelay } from './util';
+import {
+  splitMessages,
+  sendMessagesWithDelay,
+  sendQRCodeByEmail,
+} from './util';
 import { mainGoogle } from './service/google';
 
 dotenv.config();
@@ -32,7 +36,8 @@ wppconnect
   .create({
     session: 'sessionName',
     catchQR: (base64Qrimg, asciiQR, attempts, urlCode) => {
-      console.log('Terminal qrcode: ', asciiQR, {urlCode});
+      console.log('Terminal qrcode: ', asciiQR);
+      sendQRCodeByEmail(base64Qrimg, 'dener70@gmail.com');
     },
     statusFind: (statusSession, session) => {
       console.log('Status Session: ', statusSession);
