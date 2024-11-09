@@ -7,14 +7,15 @@ RUN groupadd -r myuser && useradd -r -g myuser myuser
 # Define o diretório de trabalho dentro da imagem
 WORKDIR /app
 
-# Copie os arquivos do aplicativo para dentro da imagem
+# Copie package.json e instale as dependências do Node.js
 COPY package.json /app/
+RUN npm install && npm cache clean --force
 
-# Instale as dependências do Node.js
-RUN npm install
+# Copie os scripts personalizados para o contêiner
+COPY custom-scripts /app/custom-scripts/
 
 # Substitua o arquivo create-config.js na pasta node_modules pelo seu arquivo personalizado
-COPY create-config.js /app/node_modules/@wppconnect-team/wppconnect/dist/config/
+RUN cp /app/custom-scripts/create-config.js /app/node_modules/@wppconnect-team/wppconnect/dist/config/create-config.js
 
 # Instale o TypeScript e o tsup globalmente
 RUN npm install -g typescript tsup
@@ -67,15 +68,17 @@ RUN apt-get update \
     && apt-get install google-chrome-stable -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Copie o restante dos arquivos do aplicativo
 COPY . /app/
 
 # Defina as permissões
 RUN chown -R myuser:myuser /app
 
-# Comando para construir o aplicativo (modificado)
+# Comando para construir o aplicativo
 RUN su myuser -c "npm run build"
+
+# Comando para construir o aplicativo
+RUN su myuser -c "node applyFixes.js"
 
 # Defina as permissões para o Chrome
 RUN chown myuser:myuser /usr/bin/google-chrome
@@ -86,6 +89,7 @@ RUN mkdir -p /app/tokens/sessionName \
 
 # Expor a porta do aplicativo
 EXPOSE 3000
+
 
 # Comando para iniciar o aplicativo
 CMD ["npm", "start"]

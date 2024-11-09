@@ -6,7 +6,7 @@
   "scripts": {
     "config": "node ./setup.js",
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src",
+    "build": "tsup src; node applyFixes.js",
     "start": "npx pm2 start dist/index.cjs --name zap-gpt-fotikos --no-daemon -- --no-sandbox",
     "stop": "npx pm2 delete zap-gpt-fotikos"
   },
@@ -23,6 +23,7 @@
     "axios": "^1.6.5",
     "csv-stringify": "^6.4.5",
     "dotenv": "^16.3.2",
+    "fs-extra": "^11.2.0",
     "inquirer": "^9.2.15",
     "nodemailer": "^6.9.13",
     "openai": "^4.24.2",
