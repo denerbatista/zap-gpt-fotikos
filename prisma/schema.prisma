@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./database.db"
+}
+
+model Class {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  Students Student[] @relation(name: "class")
+  StudentId Student[] @relation(name: "classId")
+}
+
+model Student {
+  id            String @id @default(uuid())
+  name          String
+  birthDate     String
+  guardian      String
+  guardianEmail String
+  phones        String // Telefones como string concatenada
+  classId       String
+  Class         Class  @relation(fields: [classId], references: [id], name: "classId")
+  class Class[] @relation(name: "class")
+}
