@@ -13,6 +13,7 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
   1. `POST /api/students` cadastrando um estudante (use os campos descritos no README).
   2. `POST /api/attendance/check-in` para simular entrada.
   3. `POST /api/attendance/mark-absences` para fechar a chamada.
+- **Swagger**: ao rodar `yarn api:dev`, abra `http://localhost:4000/api/docs` para testar requisições direto no navegador ou use `http://localhost:4000/api/docs/json` para importar nos clientes HTTP.
 - **Logs**: ficam no terminal e indicam apenas erros críticos. Para rastrear notificações simuladas, consulte `GET /api/notifications`.
 
 ## Mobile (`apps/mobile`)

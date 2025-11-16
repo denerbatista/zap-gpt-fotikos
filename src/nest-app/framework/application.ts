@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express, { RequestHandler, Router } from 'express';
 import {
   ControllerMetadata,
   ModuleMetadata,
@@ -73,6 +73,10 @@ export class NestApplication {
 
   useGlobalPipes(...pipes: Pipe[]) {
     this.pipes.push(...pipes);
+  }
+
+  registerHttpHandler(method: 'get' | 'post' | 'put' | 'patch' | 'delete', path: string, handler: RequestHandler) {
+    this.app[method](joinPaths(this.prefix, path), handler);
   }
 
   async listen(port: number) {

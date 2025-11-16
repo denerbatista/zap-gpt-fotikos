@@ -67,6 +67,10 @@ expo start --tunnel
 
 > Dica: personalize a porta da API exportando `API_PORT`. O padrão é `4000`.
 
+### Documentação Swagger
+
+Ao subir a API você pode inspecionar e testar todos os endpoints pela UI do Swagger disponível em `http://localhost:4000/api/docs`. O JSON da especificação fica exposto em `http://localhost:4000/api/docs/json`, permitindo importar no Postman/Insomnia.
+
 ### Teste rápido da API
 
 1. Cadastre um estudante:
