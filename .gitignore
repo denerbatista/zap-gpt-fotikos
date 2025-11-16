@@ -3,3 +3,8 @@ tokens
 .env
 .env.backup
 dist
+apps/api/node_modules
+apps/mobile/node_modules
+apps/mobile/.expo
+apps/mobile/dist
+apps/mobile/.turbo
