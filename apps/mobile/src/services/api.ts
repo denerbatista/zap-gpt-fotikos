@@ -12,6 +12,12 @@ export interface AttendanceRecord {
   minutesLate?: number;
   notifiedChannels: string[];
   reason?: string;
+  student: {
+    id: string;
+    name: string;
+    grade: string;
+    room: string;
+  };
 }
 
 export const fetchAttendanceFeed = async (): Promise<AttendanceRecord[]> => {

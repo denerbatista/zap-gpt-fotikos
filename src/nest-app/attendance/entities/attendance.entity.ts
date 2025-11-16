@@ -10,6 +10,12 @@ export interface AttendanceRecord {
   notifiedChannels: GuardianChannel[];
   reason?: string;
   minutesLate?: number;
+  student: {
+    id: string;
+    name: string;
+    grade: string;
+    room: string;
+  };
 }
 
 export interface AttendanceReport {

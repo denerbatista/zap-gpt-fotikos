@@ -5,6 +5,7 @@ import { StudentsService } from './students.service';
 
 @Controller('students')
 export class StudentsController {
+  static inject = [StudentsService];
   constructor(private readonly studentsService: StudentsService) {}
 
   @Get()

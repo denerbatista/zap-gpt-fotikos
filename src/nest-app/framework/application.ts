@@ -30,7 +30,8 @@ class Injector {
     if (!this.registered.has(token)) {
       this.register(token);
     }
-    const paramTypes: Type[] = Reflect.getMetadata('design:paramtypes', token) ?? [];
+    const paramTypes: Type[] =
+      Reflect.getMetadata('design:paramtypes', token) ?? ((token as any).inject ?? []);
     const dependencies = paramTypes.map((dep) => this.resolve(dep));
     const instance = new token(...dependencies);
     this.instances.set(token, instance);

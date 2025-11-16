@@ -5,6 +5,7 @@ import { parseMarkAbsencesDto } from './dto/mark-absences.dto';
 
 @Controller('attendance')
 export class AttendanceController {
+  static inject = [AttendanceService];
   constructor(private readonly attendanceService: AttendanceService) {}
 
   @Post('check-in')

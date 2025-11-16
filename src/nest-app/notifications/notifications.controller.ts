@@ -3,6 +3,7 @@ import { NotificationsService } from './notifications.service';
 
 @Controller('notifications')
 export class NotificationsController {
+  static inject = [NotificationsService];
   constructor(private readonly notificationsService: NotificationsService) {}
 
   @Get()
