@@ -25,6 +25,7 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
   EXPO_PUBLIC_API_URL="http://localhost:4000/api" yarn start:web
   ```
   Esse comando força o Expo a iniciar diretamente no modo web e fixa a porta 8081, evitando o retorno do manifesto JSON do Metro bundler.
+  > Observação: o script usa `expo start --web --port 8081` porque o Expo CLI 51 removeu a flag `--web-port`.
 - **Expo Go / dispositivo físico**:
   ```bash
   EXPO_PUBLIC_API_URL="http://<seu-host>:4000/api" expo start --tunnel
@@ -33,5 +34,6 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
 - **Changelog**: descreva mudanças na seção Mobile deste arquivo ao final da alteração.
 
 ### Mobile – Registro de alterações
+- _17/11/2025_: script `yarn start:web` atualizado para usar `--port 8081`, evitando o erro `unknown or unexpected option: --web-port` nas versões atuais do Expo CLI.
 - _16/11/2025_: criado o script `yarn start:web` para abrir a interface diretamente no navegador (porta 8081) e documentação explicando o manifesto JSON.
 - _15/01/2025_: primeira versão disponibilizada com dashboard em tempo real e check-in rápido.
