@@ -16,15 +16,21 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
 - **Logs**: ficam no terminal e indicam apenas erros críticos. Para rastrear notificações simuladas, consulte `GET /api/notifications`.
 
 ## Mobile (`apps/mobile`)
-- **Variáveis Expo**: configure `EXPO_PUBLIC_API_URL` apontando para `http://<host>:4000/api` antes de rodar `expo start`.
-- **Build local**:
+- **Variáveis Expo**: configure `EXPO_PUBLIC_API_URL` apontando para `http://<host>:4000/api` em qualquer modo de execução.
+- **Preview web (corrige o JSON em `localhost:8081`)**:
   ```bash
   cd apps/mobile
   yarn install
-  expo start --tunnel
+  EXPO_PUBLIC_API_URL="http://localhost:4000/api" yarn start:web
+  ```
+  Esse comando força o Expo a iniciar diretamente no modo web e fixa a porta 8081, evitando o retorno do manifesto JSON do Metro bundler.
+- **Expo Go / dispositivo físico**:
+  ```bash
+  EXPO_PUBLIC_API_URL="http://<seu-host>:4000/api" expo start --tunnel
   ```
 - **Checklist visual**: após qualquer alteração visual capture telas da `Dashboard` e `Entrada Rápida`.
 - **Changelog**: descreva mudanças na seção Mobile deste arquivo ao final da alteração.
 
 ### Mobile – Registro de alterações
+- _16/11/2025_: criado o script `yarn start:web` para abrir a interface diretamente no navegador (porta 8081) e documentação explicando o manifesto JSON.
 - _15/01/2025_: primeira versão disponibilizada com dashboard em tempo real e check-in rápido.

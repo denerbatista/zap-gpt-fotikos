@@ -54,10 +54,18 @@ yarn api:dev
 # Aplicativo mobile (dentro de apps/mobile)
 cd apps/mobile
 yarn install
+EXPO_PUBLIC_API_URL="http://localhost:4000/api" yarn start:web
+```
+
+Isso abre a versão web em `http://localhost:8081` (a mesma porta citada no relato do bug). Caso você rode apenas `expo start`, o endereço `:8081` retorna o manifesto JSON do Metro bundler — comportamento esperado do Expo Go —, portanto use sempre `yarn start:web` quando quiser testar direto no navegador.
+
+Para depurar com um dispositivo físico via Expo Go, mantenha a variável `EXPO_PUBLIC_API_URL` e rode:
+
+```
 expo start --tunnel
 ```
 
-> Dica: personalize a porta exportando `API_PORT`. O padrão é `4000`.
+> Dica: personalize a porta da API exportando `API_PORT`. O padrão é `4000`.
 
 ### Teste rápido da API
 
