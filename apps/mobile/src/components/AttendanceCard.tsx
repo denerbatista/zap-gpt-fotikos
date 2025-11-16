@@ -12,7 +12,12 @@ export const AttendanceCard = memo(({ record }: Props) => {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
-        <Text style={styles.title}>{record.studentId}</Text>
+        <View>
+          <Text style={styles.title}>{record.student.name}</Text>
+          <Text style={styles.subtitle}>
+            {record.student.grade} • Sala {record.student.room}
+          </Text>
+        </View>
         <StatusPill status={record.status} />
       </View>
       <Text style={styles.timestamp}>
@@ -49,6 +54,10 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontWeight: '700',
     fontSize: 16,
+  },
+  subtitle: {
+    color: colors.muted,
+    fontSize: 12,
   },
   timestamp: {
     marginTop: 4,

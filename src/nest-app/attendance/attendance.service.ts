@@ -4,10 +4,12 @@ import { StudentsService } from '../students/students.service';
 import { AttendanceRecord, AttendanceReport } from './entities/attendance.entity';
 import { NotificationsService } from '../notifications/notifications.service';
 import { CheckInDto, MarkAbsencesDto } from './types';
+import { Student } from '../students/entities/student.entity';
 
 @Injectable()
 export class AttendanceService {
   private readonly records = new Map<string, AttendanceRecord[]>();
+  static inject = [StudentsService, NotificationsService];
 
   constructor(
     private readonly studentsService: StudentsService,
@@ -28,6 +30,7 @@ export class AttendanceService {
       status,
       notifiedChannels: [],
       minutesLate: minutesLate > 0 ? minutesLate : undefined,
+      student: this.toStudentSnapshot(student),
     };
 
     if (status === 'LATE') {
@@ -65,6 +68,7 @@ export class AttendanceService {
           status: 'ABSENT',
           notifiedChannels: [],
           reason: 'Ausência confirmada após fechamento da chamada',
+          student: this.toStudentSnapshot(student),
         };
         const notification = this.notificationsService.notifyAbsence({
           student,
@@ -95,14 +99,11 @@ export class AttendanceService {
 
     const delays = records
       .filter((record) => record.status === 'LATE' && record.minutesLate)
-      .map((record) => {
-        const student = this.studentsService.findOne(record.studentId);
-        return {
-          studentId: student.id,
-          studentName: student.name,
-          minutesLate: record.minutesLate ?? 0,
-        };
-      });
+      .map((record) => ({
+        studentId: record.student.id,
+        studentName: record.student.name,
+        minutesLate: record.minutesLate ?? 0,
+      }));
 
     return {
       date: dateKey,
@@ -141,5 +142,14 @@ export class AttendanceService {
     const scheduled = new Date(checkInTime);
     scheduled.setHours(hours, minutes, 0, 0);
     return Math.floor((checkInTime.getTime() - scheduled.getTime()) / 60000);
+  }
+
+  private toStudentSnapshot(student: Student): AttendanceRecord['student'] {
+    return {
+      id: student.id,
+      name: student.name,
+      grade: student.grade,
+      room: student.room,
+    };
   }
 }

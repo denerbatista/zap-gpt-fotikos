@@ -122,4 +122,42 @@ curl -X POST http://localhost:4000/api/attendance/check-in \
 curl -X POST http://localhost:4000/api/attendance/mark-absences -H "Content-Type: application/json" -d '{}'
 ```
 
+4. Consulte o feed consumido pelo aplicativo mobile:
+
+```bash
+curl http://localhost:4000/api/attendance/feed
+```
+
+Resposta (trecho):
+
+```json
+[
+  {
+    "id": "f68f...",
+    "studentId": "stu-001",
+    "timestamp": "2025-11-16T07:32:00.000Z",
+    "status": "LATE",
+    "minutesLate": 2,
+    "student": {
+      "id": "stu-001",
+      "name": "Ana Paula",
+      "grade": "3º ano",
+      "room": "3A"
+    }
+  }
+]
+```
+
 Consulte `docs/plano-projeto.md` para o diagnóstico completo e `docs/guia-operacional.md` para o passo a passo de configuração.
+
+### Seed inicial a partir da planilha oficial
+
+1. Ajuste o arquivo `file.xlsx` seguindo as colunas esperadas (`TURMA`, `ALUNO`, `DATA DE NASCIMENTO`, `RESPONSÁVEL`, `EMAIL RESPONSÁVEL`, `TELEFONE`).
+2. Garanta que o Prisma esteja configurado com o banco desejado.
+3. Execute o importador:
+
+```bash
+npx tsx populate.ts
+```
+
+O script realiza `upsert` das turmas e insere os alunos (com dados do responsável e telefones concatenados), encerrando a conexão do Prisma ao final.

@@ -15,6 +15,7 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
   3. `POST /api/attendance/mark-absences` para fechar a chamada.
 - **Swagger**: ao rodar `yarn api:dev`, abra `http://localhost:4000/api/docs` para testar requisições direto no navegador ou use `http://localhost:4000/api/docs/json` para importar nos clientes HTTP.
 - **Logs**: ficam no terminal e indicam apenas erros críticos. Para rastrear notificações simuladas, consulte `GET /api/notifications`.
+- **Seed oficial**: mantenha `file.xlsx` no padrão descrito no README e execute `npx tsx populate.ts` para importar turmas e alunos via Prisma.
 
 ## Mobile (`apps/mobile`)
 - **Variáveis Expo**: configure `EXPO_PUBLIC_API_URL` apontando para `http://<host>:4000/api` em qualquer modo de execução.
@@ -39,6 +40,7 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
 - **Changelog**: descreva mudanças na seção Mobile deste arquivo ao final da alteração.
 
 ### Mobile – Registro de alterações
+- _19/11/2025_: os cards do painel exibem nome, ano/sala e continuam alinhados ao snapshot retornado pela API de presença.
 - _18/11/2025_: criado o Docker Compose com serviços `api` e `mobile-web`, além do alias global `@/*` para os imports do app mobile.
 - _17/11/2025_: script `yarn start:web` atualizado para usar `--port 8081`, evitando o erro `unknown or unexpected option: --web-port` nas versões atuais do Expo CLI.
 - _16/11/2025_: criado o script `yarn start:web` para abrir a interface diretamente no navegador (porta 8081) e documentação explicando o manifesto JSON.
