@@ -59,8 +59,6 @@ EXPO_PUBLIC_API_URL="http://localhost:4000/api" yarn start:web
 
 Isso abre a versão web em `http://localhost:8081` (a mesma porta citada no relato do bug). Caso você rode apenas `expo start`, o endereço `:8081` retorna o manifesto JSON do Metro bundler — comportamento esperado do Expo Go —, portanto use sempre `yarn start:web` quando quiser testar direto no navegador.
 
-> Se o bundler acusar `Unable to resolve "expo-status-bar" from "App.tsx"`, rode `yarn install` (ou `npx expo install expo-status-bar`) dentro de `apps/mobile` para garantir que a dependência oficial do app esteja presente.
-
 Para depurar com um dispositivo físico via Expo Go, mantenha a variável `EXPO_PUBLIC_API_URL` e rode:
 
 ```
