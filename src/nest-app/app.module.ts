@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module } from './framework';
 import { StudentsModule } from './students/students.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { NotificationsModule } from './notifications/notifications.module';

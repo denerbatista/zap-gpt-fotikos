@@ -22,13 +22,13 @@ Confira mais detalhes do projeto no meu [Instagram](https://www.instagram.com/ma
 
 ## 🏗️ Nova arquitetura para controle de estudantes
 
-O serviço "students" agora é atendido por uma **API RESTful em NestJS** e por um **aplicativo mobile em React Native (Expo)**, deixando a dependência do WhatsApp opcional.
+O serviço "students" agora é atendido por uma **API RESTful inspirada no NestJS** (framework próprio em TypeScript) e por um **aplicativo mobile em React Native (Expo)**, deixando a dependência do WhatsApp opcional.
 
 ### Componentes
 
 | Camada | Pasta | Tecnologias | Objetivo |
 | --- | --- | --- | --- |
-| API | `src/nest-app` | NestJS, Class Validator | Endpoints para estudantes, presença, notificações e relatórios |
+| API | `src/nest-app` | Express + decorators customizados | Endpoints para estudantes, presença, notificações e relatórios |
 | Mobile | `apps/mobile` | React Native, Expo, React Navigation | Check-in rápido, painel em tempo real, disparo de fechamento da chamada |
 | Planejamento | `docs/plano-projeto.md` | Markdown | Diagnóstico, cronograma e métricas exigidas pela escola |
 
@@ -43,19 +43,65 @@ O serviço "students" agora é atendido por uma **API RESTful em NestJS** e por 
 
 - Tela **Painel**: métricas, feed em tempo real e cards de atraso/ausência.
 - Tela **Entrada rápida**: leitura de QR/RFID (ou digitação manual) e botão para fechar a chamada.
-- Integração com `EXPO_PUBLIC_API_URL` para apontar para a Nest API.
+- Integração com `EXPO_PUBLIC_API_URL` para apontar para a API.
 
 ### Como rodar
 
 ```
-# API NestJS
-yarn install  # necessário para instalar as dependências novas (NestJS)
+# API
 yarn api:dev
 
 # Aplicativo mobile (dentro de apps/mobile)
 cd apps/mobile
 yarn install
+EXPO_PUBLIC_API_URL="http://localhost:4000/api" yarn start:web
+```
+
+Isso abre a versão web em `http://localhost:8081` (a mesma porta citada no relato do bug). Caso você rode apenas `expo start`, o endereço `:8081` retorna o manifesto JSON do Metro bundler — comportamento esperado do Expo Go —, portanto use sempre `yarn start:web` quando quiser testar direto no navegador.
+
+Para depurar com um dispositivo físico via Expo Go, mantenha a variável `EXPO_PUBLIC_API_URL` e rode:
+
+```
 expo start --tunnel
 ```
 
-Consulte `docs/plano-projeto.md` para o diagnóstico completo, cronograma detalhado e critérios de sucesso acordados com a EMEF Mário Leal Silva.
+> Dica: personalize a porta da API exportando `API_PORT`. O padrão é `4000`.
+
+### Documentação Swagger
+
+Ao subir a API você pode inspecionar e testar todos os endpoints pela UI do Swagger disponível em `http://localhost:4000/api/docs`. O JSON da especificação fica exposto em `http://localhost:4000/api/docs/json`, permitindo importar no Postman/Insomnia.
+
+### Teste rápido da API
+
+1. Cadastre um estudante:
+
+```bash
+curl -X POST http://localhost:4000/api/students \
+  -H "Content-Type: application/json" \
+  -d '{
+        "name": "Aluno Piloto",
+        "grade": "3º ano",
+        "room": "3A",
+        "classStartTime": "07:30",
+        "gracePeriodMinutes": 5,
+        "guardians": [
+          { "name": "Carla", "channel": "whatsapp", "value": "+55 27 99999-1111", "preferred": true }
+        ]
+      }'
+```
+
+2. Registre o check-in:
+
+```bash
+curl -X POST http://localhost:4000/api/attendance/check-in \
+  -H "Content-Type: application/json" \
+  -d '{ "studentId": "stu-001" }'
+```
+
+3. Feche a chamada (marca faltas restantes):
+
+```bash
+curl -X POST http://localhost:4000/api/attendance/mark-absences -H "Content-Type: application/json" -d '{}'
+```
+
+Consulte `docs/plano-projeto.md` para o diagnóstico completo e `docs/guia-operacional.md` para o passo a passo de configuração.

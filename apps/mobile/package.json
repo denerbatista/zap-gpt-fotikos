@@ -5,6 +5,7 @@
   "main": "expo/AppEntry",
   "scripts": {
     "start": "expo start",
+    "start:web": "expo start --web --web-port 8081",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "test": "jest"

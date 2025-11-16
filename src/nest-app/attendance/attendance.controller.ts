@@ -1,19 +1,21 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '../framework';
 import { AttendanceService } from './attendance.service';
-import { CheckInDto } from './dto/check-in.dto';
-import { MarkAbsencesDto } from './dto/mark-absences.dto';
+import { parseCheckInDto } from './dto/check-in.dto';
+import { parseMarkAbsencesDto } from './dto/mark-absences.dto';
 
 @Controller('attendance')
 export class AttendanceController {
   constructor(private readonly attendanceService: AttendanceService) {}
 
   @Post('check-in')
-  checkIn(@Body() dto: CheckInDto) {
+  checkIn(@Body() payload: unknown) {
+    const dto = parseCheckInDto(payload);
     return this.attendanceService.checkIn(dto);
   }
 
   @Post('mark-absences')
-  markAbsences(@Body() dto: MarkAbsencesDto) {
+  markAbsences(@Body() payload: unknown) {
+    const dto = parseMarkAbsencesDto(payload);
     return this.attendanceService.markAbsences(dto);
   }
 

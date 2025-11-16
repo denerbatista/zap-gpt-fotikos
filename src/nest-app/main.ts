@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { NestFactory, ValidationPipe } from './framework';
 import { AppModule } from './app.module';
+import { setupSwagger } from './swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -16,6 +16,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
+
+  setupSwagger(app);
 
   const port = process.env.API_PORT ? Number(process.env.API_PORT) : 4000;
   await app.listen(port);

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '../framework';
 import { randomUUID } from 'crypto';
 import { Student } from '../students/entities/student.entity';
 
