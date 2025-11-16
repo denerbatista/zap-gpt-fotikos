@@ -25,8 +25,6 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
   EXPO_PUBLIC_API_URL="http://localhost:4000/api" yarn start:web
   ```
   Esse comando força o Expo a iniciar diretamente no modo web e fixa a porta 8081, evitando o retorno do manifesto JSON do Metro bundler.
-- **Dependências obrigatórias**: caso o Metro mostre `Unable to resolve "expo-status-bar" from "App.tsx"`, execute `yarn install` (ou `npx expo install expo-status-bar`) em `apps/mobile`. A biblioteca faz parte do app e precisa estar instalada antes de usar `yarn start:web` ou `expo start`.
-- **Alias `@/`**: os imports organizados com `@/` dependem do plugin `babel-plugin-module-resolver`. Se o bundler acusar `Unable to resolve '@/...'`, rode `yarn install` (ou `npx expo install babel-plugin-module-resolver`) em `apps/mobile` para restaurar o plugin.
 - **Expo Go / dispositivo físico**:
   ```bash
   EXPO_PUBLIC_API_URL="http://<seu-host>:4000/api" expo start --tunnel
@@ -35,7 +33,5 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
 - **Changelog**: descreva mudanças na seção Mobile deste arquivo ao final da alteração.
 
 ### Mobile – Registro de alterações
-- _17/11/2025_: adicionada a dependência `expo-status-bar` e orientações para reinstalar pacotes quando o bundler apontar o erro "Unable to resolve".
-- _18/11/2025_: configurado o alias `@/` via `babel-plugin-module-resolver` para que o Expo resolva corretamente `@/theme`, `@/screens` e demais módulos.
 - _16/11/2025_: criado o script `yarn start:web` para abrir a interface diretamente no navegador (porta 8081) e documentação explicando o manifesto JSON.
 - _15/01/2025_: primeira versão disponibilizada com dashboard em tempo real e check-in rápido.
