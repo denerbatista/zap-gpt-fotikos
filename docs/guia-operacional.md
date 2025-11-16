@@ -30,10 +30,16 @@ Este documento centraliza instruções de uso, configuração e manutenção do 
   ```bash
   EXPO_PUBLIC_API_URL="http://<seu-host>:4000/api" expo start --tunnel
   ```
+- **Docker Compose**: com a API local rodando (porta 4000), é possível iniciar apenas o preview web via container:
+  ```bash
+  docker compose up --build mobile-web
+  ```
+  O bundle responde em `http://localhost:8081` e as alterações feitas em `apps/mobile` são sincronizadas automaticamente.
 - **Checklist visual**: após qualquer alteração visual capture telas da `Dashboard` e `Entrada Rápida`.
 - **Changelog**: descreva mudanças na seção Mobile deste arquivo ao final da alteração.
 
 ### Mobile – Registro de alterações
+- _18/11/2025_: criado o Docker Compose com serviços `api` e `mobile-web`, além do alias global `@/*` para os imports do app mobile.
 - _17/11/2025_: script `yarn start:web` atualizado para usar `--port 8081`, evitando o erro `unknown or unexpected option: --web-port` nas versões atuais do Expo CLI.
 - _16/11/2025_: criado o script `yarn start:web` para abrir a interface diretamente no navegador (porta 8081) e documentação explicando o manifesto JSON.
 - _15/01/2025_: primeira versão disponibilizada com dashboard em tempo real e check-in rápido.
