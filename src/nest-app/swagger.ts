@@ -1,46 +1,111 @@
 import { NestApplication } from './framework/application';
 
 const baseSchemas = {
+  GuardianContact: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      channel: { type: 'string', enum: ['push', 'whatsapp', 'sms', 'email'] },
+      value: { type: 'string' },
+      preferred: { type: 'boolean', nullable: true },
+    },
+    required: ['name', 'channel', 'value'],
+  },
   Student: {
     type: 'object',
     properties: {
-      id: { type: 'string', format: 'uuid' },
+      id: { type: 'string', example: 'stu-a1b2c3' },
       name: { type: 'string' },
       grade: { type: 'string' },
-      guardianName: { type: 'string' },
-      guardianPhone: { type: 'string' },
+      room: { type: 'string' },
+      classStartTime: { type: 'string', pattern: '^(?:[01]\\d|2[0-3]):[0-5]\\d$' },
+      gracePeriodMinutes: { type: 'integer', minimum: 0 },
+      guardians: {
+        type: 'array',
+        items: { $ref: '#/components/schemas/GuardianContact' },
+        minItems: 1,
+      },
+      tags: {
+        type: 'array',
+        nullable: true,
+        items: { type: 'string' },
+      },
     },
-    required: ['id', 'name', 'grade', 'guardianName', 'guardianPhone'],
+    required: ['id', 'name', 'grade', 'room', 'classStartTime', 'gracePeriodMinutes', 'guardians'],
+  },
+  CreateStudentRequest: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      grade: { type: 'string' },
+      room: { type: 'string' },
+      classStartTime: { type: 'string', pattern: '^(?:[01]\\d|2[0-3]):[0-5]\\d$' },
+      gracePeriodMinutes: { type: 'integer', minimum: 0 },
+      guardians: {
+        type: 'array',
+        items: { $ref: '#/components/schemas/GuardianContact' },
+        minItems: 1,
+      },
+      tags: {
+        type: 'array',
+        nullable: true,
+        items: { type: 'string' },
+      },
+    },
+    required: ['name', 'grade', 'room', 'classStartTime', 'gracePeriodMinutes', 'guardians'],
+  },
+  UpdateStudentRequest: {
+    type: 'object',
+    description: 'Informe ao menos um campo para atualização',
+    properties: {
+      name: { type: 'string' },
+      grade: { type: 'string' },
+      room: { type: 'string' },
+      classStartTime: { type: 'string', pattern: '^(?:[01]\\d|2[0-3]):[0-5]\\d$' },
+      gracePeriodMinutes: { type: 'integer', minimum: 0 },
+      guardians: {
+        type: 'array',
+        items: { $ref: '#/components/schemas/GuardianContact' },
+        minItems: 1,
+      },
+      tags: {
+        type: 'array',
+        nullable: true,
+        items: { type: 'string' },
+      },
+    },
+    additionalProperties: false,
   },
   CheckInRequest: {
     type: 'object',
     properties: {
-      studentId: { type: 'string', format: 'uuid' },
-      method: { type: 'string', enum: ['qr', 'face', 'manual'] },
-      timestamp: { type: 'string', format: 'date-time' },
+      studentId: { type: 'string', example: 'stu-001' },
+      timestamp: { type: 'string', format: 'date-time', nullable: true },
     },
-    required: ['studentId', 'method'],
+    required: ['studentId'],
   },
   MarkAbsencesRequest: {
     type: 'object',
     properties: {
-      date: { type: 'string', format: 'date' },
-      studentIds: {
-        type: 'array',
-        items: { type: 'string', format: 'uuid' },
-      },
+      timestamp: { type: 'string', format: 'date-time', nullable: true },
+      room: { type: 'string', nullable: true },
     },
-    required: ['studentIds'],
   },
-  AttendanceFeedItem: {
+  AttendanceRecord: {
     type: 'object',
     properties: {
-      studentId: { type: 'string', format: 'uuid' },
-      status: { type: 'string', enum: ['on_time', 'late', 'absent'] },
-      recordedAt: { type: 'string', format: 'date-time' },
-      deliveredAt: { type: 'string', format: 'date-time', nullable: true },
-      deliveryChannel: { type: 'string', nullable: true },
+      id: { type: 'string', format: 'uuid' },
+      studentId: { type: 'string' },
+      timestamp: { type: 'string', format: 'date-time' },
+      status: { type: 'string', enum: ['ON_TIME', 'LATE', 'ABSENT'] },
+      notifiedChannels: {
+        type: 'array',
+        items: { type: 'string', enum: ['push', 'whatsapp', 'sms', 'email'] },
+      },
+      reason: { type: 'string', nullable: true },
+      minutesLate: { type: 'integer', nullable: true },
     },
+    required: ['id', 'studentId', 'timestamp', 'status', 'notifiedChannels'],
   },
   DailyReport: {
     type: 'object',
@@ -49,33 +114,44 @@ const baseSchemas = {
       totals: {
         type: 'object',
         properties: {
-          on_time: { type: 'integer' },
-          late: { type: 'integer' },
-          absent: { type: 'integer' },
+          ON_TIME: { type: 'integer' },
+          LATE: { type: 'integer' },
+          ABSENT: { type: 'integer' },
+          overall: { type: 'integer' },
         },
+        required: ['ON_TIME', 'LATE', 'ABSENT', 'overall'],
       },
-      entries: {
+      delays: {
         type: 'array',
         items: {
           type: 'object',
           properties: {
-            studentId: { type: 'string', format: 'uuid' },
-            status: { type: 'string' },
-            notes: { type: 'string' },
+            studentId: { type: 'string' },
+            studentName: { type: 'string' },
+            minutesLate: { type: 'integer' },
           },
+          required: ['studentId', 'studentName', 'minutesLate'],
         },
       },
     },
+    required: ['date', 'totals', 'delays'],
   },
   NotificationEvent: {
     type: 'object',
     properties: {
       id: { type: 'string', format: 'uuid' },
-      studentId: { type: 'string', format: 'uuid' },
-      channel: { type: 'string' },
-      status: { type: 'string' },
-      dispatchedAt: { type: 'string', format: 'date-time' },
+      studentId: { type: 'string' },
+      studentName: { type: 'string' },
+      type: { type: 'string', enum: ['DELAY', 'ABSENCE'] },
+      channels: {
+        type: 'array',
+        items: { type: 'string', enum: ['push', 'whatsapp', 'sms', 'email'] },
+      },
+      message: { type: 'string' },
+      occurredAt: { type: 'string', format: 'date-time' },
+      sentAt: { type: 'string', format: 'date-time' },
     },
+    required: ['id', 'studentId', 'studentName', 'type', 'channels', 'message', 'occurredAt', 'sentAt'],
   },
 };
 
@@ -121,21 +197,12 @@ const swaggerDocument = {
           required: true,
           content: {
             'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  name: { type: 'string' },
-                  grade: { type: 'string' },
-                  guardianName: { type: 'string' },
-                  guardianPhone: { type: 'string' },
-                },
-                required: ['name', 'grade', 'guardianName', 'guardianPhone'],
-              },
+              schema: { $ref: '#/components/schemas/CreateStudentRequest' },
             },
           },
         },
         responses: {
-          201: {
+          200: {
             description: 'Estudante criado',
             content: {
               'application/json': {
@@ -155,7 +222,7 @@ const swaggerDocument = {
             name: 'id',
             in: 'path',
             required: true,
-            schema: { type: 'string', format: 'uuid' },
+            schema: { type: 'string' },
           },
         ],
         responses: {
@@ -178,22 +245,14 @@ const swaggerDocument = {
             name: 'id',
             in: 'path',
             required: true,
-            schema: { type: 'string', format: 'uuid' },
+            schema: { type: 'string' },
           },
         ],
         requestBody: {
           required: true,
           content: {
             'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  name: { type: 'string' },
-                  grade: { type: 'string' },
-                  guardianName: { type: 'string' },
-                  guardianPhone: { type: 'string' },
-                },
-              },
+              schema: { $ref: '#/components/schemas/UpdateStudentRequest' },
             },
           },
         },
@@ -222,8 +281,13 @@ const swaggerDocument = {
           },
         },
         responses: {
-          201: {
-            description: 'Check-in aceito e notificação disparada quando necessário',
+          200: {
+            description: 'Check-in registrado',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/AttendanceRecord' },
+              },
+            },
           },
         },
       },
@@ -233,7 +297,7 @@ const swaggerDocument = {
         tags: ['Attendance'],
         summary: 'Marca ausências após o fechamento da chamada',
         requestBody: {
-          required: true,
+          required: false,
           content: {
             'application/json': {
               schema: { $ref: '#/components/schemas/MarkAbsencesRequest' },
@@ -243,6 +307,11 @@ const swaggerDocument = {
         responses: {
           200: {
             description: 'Ausências registradas',
+            content: {
+              'application/json': {
+                schema: { type: 'array', items: { $ref: '#/components/schemas/AttendanceRecord' } },
+              },
+            },
           },
         },
       },
@@ -264,7 +333,7 @@ const swaggerDocument = {
             description: 'Eventos encontrados',
             content: {
               'application/json': {
-                schema: { type: 'array', items: { $ref: '#/components/schemas/AttendanceFeedItem' } },
+                schema: { type: 'array', items: { $ref: '#/components/schemas/AttendanceRecord' } },
               },
             },
           },
@@ -323,7 +392,9 @@ export function setupSwagger(app: NestApplication) {
   });
 
   app.registerHttpHandler('get', 'docs', (_req, res) => {
-    res.type('html').send(`<!DOCTYPE html>
+    res
+      .type('html')
+      .send(`<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
