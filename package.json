@@ -8,7 +8,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsup src",
     "start": "npx pm2 start dist/index.cjs --name zap-gpt-fotikos --no-daemon -- --no-sandbox",
-    "stop": "npx pm2 delete zap-gpt-fotikos"
+    "stop": "npx pm2 delete zap-gpt-fotikos",
+    "api:dev": "tsx --tsconfig tsconfig.nest.json src/nest-app/main.ts"
   },
   "keywords": [],
   "author": {
@@ -18,10 +19,16 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@nestjs/common": "^10.3.10",
+    "@nestjs/mapped-types": "^2.0.4",
+    "@nestjs/core": "^10.3.10",
+    "@nestjs/platform-express": "^10.3.10",
     "@google/generative-ai": "^0.2.1",
     "@prisma/client": "^5.22.0",
     "@wppconnect-team/wppconnect": "1.30.2",
     "axios": "^1.6.5",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "csv-stringify": "^6.4.5",
     "dotenv": "^16.3.2",
     "express": "^4.21.1",
@@ -32,6 +39,8 @@
     "open": "^10.1.0",
     "openai": "^4.24.2",
     "prisma": "^5.22.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
     "sharp": "^0.33.3",
     "ts-node": "^10.9.2",
     "xlsx": "^0.18.5"
