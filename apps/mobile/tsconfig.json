@@ -3,11 +3,10 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": "./",
+    "types": ["react"],
     "paths": {
-      "@/components/*": ["src/components/*"],
-      "@/screens/*": ["src/screens/*"],
-      "@/services/*": ["src/services/*"],
-      "@/hooks/*": ["src/hooks/*"]
+      "@/*": ["src/*"]
     }
-  }
+  },
+  "include": ["App.tsx", "src"]
 }

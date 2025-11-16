@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    command: yarn api:dev
+    environment:
+      API_PORT: 4000
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+  mobile-web:
+    build:
+      context: apps/mobile
+      dockerfile: Dockerfile
+    command: yarn start:web
+    environment:
+      EXPO_PUBLIC_API_URL: http://localhost:4000/api
+    ports:
+      - '8081:8081'
+    volumes:
+      - ./apps/mobile:/app
+      - /app/node_modules
+    depends_on:
+      - api

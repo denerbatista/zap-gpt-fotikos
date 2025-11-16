@@ -47,6 +47,8 @@ O serviço "students" agora é atendido por uma **API RESTful inspirada no NestJ
 
 ### Como rodar
 
+#### Execução manual
+
 ```
 # API
 yarn api:dev
@@ -68,6 +70,20 @@ expo start --tunnel
 ```
 
 > Dica: personalize a porta da API exportando `API_PORT`. O padrão é `4000`.
+
+#### Docker Compose (API + preview web)
+
+Para evitar conflitos de dependências locais, o repositório agora possui imagens específicas para a API (`docker/api.Dockerfile`) e para o aplicativo (`apps/mobile/Dockerfile`). Suba tudo com:
+
+```
+docker compose up --build api mobile-web
+```
+
+- A API ficará disponível em `http://localhost:4000/api`.
+- O preview web do Expo responde em `http://localhost:8081`.
+- Ajuste `EXPO_PUBLIC_API_URL` no serviço `mobile-web` (arquivo `docker-compose.yml`) caso a API rode fora da máquina local.
+
+> Para trabalhar apenas com o app, use `docker compose up mobile-web`. O container recompila automaticamente sempre que você altera arquivos em `apps/mobile`.
 
 ### Documentação Swagger
 
