@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreateStudentDto } from './dto/create-student.dto';
-import { UpdateStudentDto } from './dto/update-student.dto';
+import { Body, Controller, Get, Param, Patch, Post } from '../framework';
+import { parseCreateStudentDto } from './dto/create-student.dto';
+import { parseUpdateStudentDto } from './dto/update-student.dto';
 import { StudentsService } from './students.service';
 
 @Controller('students')
@@ -18,12 +18,14 @@ export class StudentsController {
   }
 
   @Post()
-  create(@Body() dto: CreateStudentDto) {
+  create(@Body() payload: unknown) {
+    const dto = parseCreateStudentDto(payload);
     return this.studentsService.create(dto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateStudentDto) {
+  update(@Param('id') id: string, @Body() payload: unknown) {
+    const dto = parseUpdateStudentDto(payload);
     return this.studentsService.update(id, dto);
   }
 }

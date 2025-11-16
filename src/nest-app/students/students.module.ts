@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module } from '../framework';
 import { StudentsService } from './students.service';
 import { StudentsController } from './students.controller';
 

@@ -1,60 +1,62 @@
-import { Type } from 'class-transformer';
+import { BadRequestException } from '../../framework';
+import { GuardianChannel, GuardianContact } from '../entities/student.entity';
 import {
-  ArrayNotEmpty,
-  IsArray,
-  IsIn,
-  IsOptional,
-  IsString,
-  Matches,
-  MaxLength,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import { GuardianChannel } from '../entities/student.entity';
+  ensureArray,
+  ensureObject,
+  ensurePositiveInt,
+  ensureString,
+  ensureTimeString,
+} from '../../utils/validation';
 
-class GuardianContactDto {
-  @IsString()
-  @MaxLength(60)
-  name!: string;
-
-  @IsIn(['push', 'whatsapp', 'sms', 'email'])
-  channel!: GuardianChannel;
-
-  @IsString()
-  @MaxLength(80)
-  value!: string;
-
-  @IsOptional()
-  preferred?: boolean;
+export interface CreateStudentDto {
+  name: string;
+  grade: string;
+  room: string;
+  classStartTime: string;
+  gracePeriodMinutes: number;
+  guardians: GuardianContact[];
+  tags?: string[];
 }
 
-export class CreateStudentDto {
-  @IsString()
-  @MaxLength(80)
-  name!: string;
+export const GUARDIAN_CHANNELS: readonly GuardianChannel[] = ['push', 'whatsapp', 'sms', 'email'];
 
-  @IsString()
-  @MaxLength(15)
-  grade!: string;
+export function parseCreateStudentDto(payload: unknown): CreateStudentDto {
+  const data = ensureObject(payload, 'criação de estudante');
+  const name = ensureString(data.name, 'name');
+  const grade = ensureString(data.grade, 'grade');
+  const room = ensureString(data.room, 'room');
+  const classStartTime = ensureTimeString(ensureString(data.classStartTime, 'classStartTime'), 'classStartTime');
+  const gracePeriodMinutes = ensurePositiveInt(data.gracePeriodMinutes, 'gracePeriodMinutes');
 
-  @IsString()
-  @MaxLength(5)
-  room!: string;
+  const guardiansRaw = ensureArray(data.guardians, 'guardians');
+  if (guardiansRaw.length === 0) {
+    throw new BadRequestException('Informe ao menos um responsável em guardians.');
+  }
+  const guardians: GuardianContact[] = guardiansRaw.map((guardian, index) => {
+    const entity = ensureObject(guardian, `guardian[${index}]`);
+    const channelValue = ensureString(entity.channel, `guardian[${index}].channel`) as GuardianChannel;
+    if (!GUARDIAN_CHANNELS.includes(channelValue)) {
+      throw new BadRequestException(
+        `Canal inválido em guardian[${index}].channel. Valores aceitos: ${GUARDIAN_CHANNELS.join(', ')}`
+      );
+    }
+    return {
+      name: ensureString(entity.name, `guardian[${index}].name`),
+      channel: channelValue,
+      value: ensureString(entity.value, `guardian[${index}].value`),
+      preferred: entity.preferred === undefined ? undefined : Boolean(entity.preferred),
+    };
+  });
 
-  @Matches(/^\d{2}:\d{2}$/)
-  classStartTime!: string;
+  const tags = data.tags ? ensureArray(data.tags, 'tags').map((tag, idx) => ensureString(tag, `tags[${idx}]`)) : undefined;
 
-  @Min(0)
-  gracePeriodMinutes = 5;
-
-  @IsArray()
-  @ArrayNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => GuardianContactDto)
-  guardians!: GuardianContactDto[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  tags?: string[];
+  return {
+    name,
+    grade,
+    room,
+    classStartTime,
+    gracePeriodMinutes,
+    guardians,
+    tags,
+  };
 }

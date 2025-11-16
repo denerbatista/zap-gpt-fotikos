@@ -1,11 +1,12 @@
-import { IsISO8601, IsOptional, IsString } from 'class-validator';
+import { ensureObject, ensureOptionalISODate, ensureOptionalString } from '../../utils/validation';
+import { MarkAbsencesDto } from '../types';
 
-export class MarkAbsencesDto {
-  @IsOptional()
-  @IsISO8601({ strict: true })
-  timestamp?: string;
-
-  @IsOptional()
-  @IsString()
-  room?: string;
+export function parseMarkAbsencesDto(payload: unknown): MarkAbsencesDto {
+  const data = ensureObject(payload ?? {}, 'marcação de faltas');
+  const timestamp = ensureOptionalISODate(data.timestamp, 'timestamp');
+  const room = ensureOptionalString(data.room, 'room');
+  return {
+    timestamp,
+    room,
+  };
 }

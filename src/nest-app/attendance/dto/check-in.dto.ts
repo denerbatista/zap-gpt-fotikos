@@ -1,10 +1,12 @@
-import { IsISO8601, IsOptional, IsString } from 'class-validator';
+import { ensureObject, ensureOptionalISODate, ensureString } from '../../utils/validation';
+import { CheckInDto } from '../types';
 
-export class CheckInDto {
-  @IsString()
-  studentId!: string;
-
-  @IsOptional()
-  @IsISO8601({ strict: true })
-  timestamp?: string;
+export function parseCheckInDto(payload: unknown): CheckInDto {
+  const data = ensureObject(payload, 'check-in');
+  const studentId = ensureString(data.studentId, 'studentId');
+  const timestamp = ensureOptionalISODate(data.timestamp, 'timestamp');
+  return {
+    studentId,
+    timestamp,
+  };
 }

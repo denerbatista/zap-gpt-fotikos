@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '../framework';
 import { randomUUID } from 'crypto';
 import { StudentsService } from '../students/students.service';
 import { AttendanceRecord, AttendanceReport } from './entities/attendance.entity';
-import { CheckInDto } from './dto/check-in.dto';
-import { MarkAbsencesDto } from './dto/mark-absences.dto';
 import { NotificationsService } from '../notifications/notifications.service';
+import { CheckInDto, MarkAbsencesDto } from './types';
 
 @Injectable()
 export class AttendanceService {
