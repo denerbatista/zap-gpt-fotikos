@@ -4,16 +4,20 @@ import { StudentsService } from '../students/students.service';
 import { AttendanceRecord, AttendanceReport } from './entities/attendance.entity';
 import { NotificationsService } from '../notifications/notifications.service';
 import { CheckInDto, MarkAbsencesDto } from './types';
+import { RegisterFaceDto } from './dto/register-face.dto';
+import { FaceCheckInDto } from './dto/face-check-in.dto';
+import { FaceRecognitionService } from './face-recognition.service';
 import { Student } from '../students/entities/student.entity';
 
 @Injectable()
 export class AttendanceService {
   private readonly records = new Map<string, AttendanceRecord[]>();
-  static inject = [StudentsService, NotificationsService];
+  static inject = [StudentsService, NotificationsService, FaceRecognitionService];
 
   constructor(
     private readonly studentsService: StudentsService,
-    private readonly notificationsService: NotificationsService
+    private readonly notificationsService: NotificationsService,
+    private readonly faceRecognitionService: FaceRecognitionService
   ) {}
 
   checkIn({ studentId, timestamp }: CheckInDto): AttendanceRecord {
@@ -80,6 +84,22 @@ export class AttendanceService {
       });
 
     return created;
+  }
+
+  registerFaceTemplate({ studentId, imageBase64 }: RegisterFaceDto) {
+    const student = this.studentsService.findOne(studentId);
+    const enrollment = this.faceRecognitionService.register(student.id, imageBase64);
+    return {
+      student: this.toStudentSnapshot(student),
+      registeredAt: enrollment.registeredAt,
+      templateVersion: enrollment.templateVersion,
+      vectorSize: enrollment.vectorSize,
+    };
+  }
+
+  checkInWithFace({ imageBase64, timestamp }: FaceCheckInDto) {
+    const match = this.faceRecognitionService.identify(imageBase64);
+    return this.checkIn({ studentId: match.student.id, timestamp });
   }
 
   getDailyReport(date?: string): AttendanceReport {

@@ -36,3 +36,25 @@ export const markAbsences = async () => {
   const response = await api.post<AttendanceRecord[]>('/attendance/mark-absences', {});
   return response.data;
 };
+
+export interface FaceEnrollmentResponse {
+  student: AttendanceRecord['student'];
+  registeredAt: string;
+  templateVersion: string;
+  vectorSize: number;
+}
+
+export const registerFaceTemplate = async (studentId: string, imageBase64: string) => {
+  const response = await api.post<FaceEnrollmentResponse>('/attendance/face/register', {
+    studentId,
+    imageBase64,
+  });
+  return response.data;
+};
+
+export const checkInByFace = async (imageBase64: string) => {
+  const response = await api.post<AttendanceRecord>('/attendance/face/check-in', {
+    imageBase64,
+  });
+  return response.data;
+};

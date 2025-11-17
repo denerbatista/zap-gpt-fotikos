@@ -91,6 +91,38 @@ const baseSchemas = {
       room: { type: 'string', nullable: true },
     },
   },
+  FaceEnrollmentRequest: {
+    type: 'object',
+    properties: {
+      studentId: { type: 'string', example: 'stu-001' },
+      imageBase64: {
+        type: 'string',
+        description: 'Data URI com o rosto em base64 (ex.: data:image/jpeg;base64,...)',
+      },
+    },
+    required: ['studentId', 'imageBase64'],
+  },
+  FaceEnrollmentResponse: {
+    type: 'object',
+    properties: {
+      student: { $ref: '#/components/schemas/Student' },
+      registeredAt: { type: 'string', format: 'date-time' },
+      templateVersion: { type: 'string' },
+      vectorSize: { type: 'integer' },
+    },
+    required: ['student', 'registeredAt', 'templateVersion', 'vectorSize'],
+  },
+  FaceCheckInRequest: {
+    type: 'object',
+    properties: {
+      imageBase64: {
+        type: 'string',
+        description: 'Data URI do rosto capturado',
+      },
+      timestamp: { type: 'string', format: 'date-time', nullable: true },
+    },
+    required: ['imageBase64'],
+  },
   AttendanceRecord: {
     type: 'object',
     properties: {
@@ -310,6 +342,54 @@ const swaggerDocument = {
             content: {
               'application/json': {
                 schema: { type: 'array', items: { $ref: '#/components/schemas/AttendanceRecord' } },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/attendance/face/register': {
+      post: {
+        tags: ['Attendance'],
+        summary: 'Associa um rosto ao estudante informado',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/FaceEnrollmentRequest' },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Template criado e pronto para reconhecimento',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/FaceEnrollmentResponse' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/attendance/face/check-in': {
+      post: {
+        tags: ['Attendance'],
+        summary: 'Realiza um check-in automático a partir do rosto',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/FaceCheckInRequest' },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Check-in efetuado para o estudante reconhecido',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/AttendanceRecord' },
               },
             },
           },

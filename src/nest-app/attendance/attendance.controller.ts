@@ -2,6 +2,8 @@ import { Body, Controller, Get, Post, Query } from '../framework';
 import { AttendanceService } from './attendance.service';
 import { parseCheckInDto } from './dto/check-in.dto';
 import { parseMarkAbsencesDto } from './dto/mark-absences.dto';
+import { parseRegisterFaceDto } from './dto/register-face.dto';
+import { parseFaceCheckInDto } from './dto/face-check-in.dto';
 
 @Controller('attendance')
 export class AttendanceController {
@@ -28,5 +30,17 @@ export class AttendanceController {
   @Get('reports/daily')
   getDailyReport(@Query('date') date?: string) {
     return this.attendanceService.getDailyReport(date);
+  }
+
+  @Post('face/register')
+  registerFace(@Body() payload: unknown) {
+    const dto = parseRegisterFaceDto(payload);
+    return this.attendanceService.registerFaceTemplate(dto);
+  }
+
+  @Post('face/check-in')
+  checkInWithFace(@Body() payload: unknown) {
+    const dto = parseFaceCheckInDto(payload);
+    return this.attendanceService.checkInWithFace(dto);
   }
 }
