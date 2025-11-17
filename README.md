@@ -42,8 +42,9 @@ O serviço "students" agora é atendido por uma **API RESTful inspirada no NestJ
 ### Aplicativo React Native
 
 - Tela **Painel**: métricas, feed em tempo real e cards de atraso/ausência.
-- Tela **Entrada rápida**: leitura de QR/RFID (ou digitação manual) e botão para fechar a chamada.
-- Integração com `EXPO_PUBLIC_API_URL` para apontar para a API.
+- Tela **Entrada rápida**: leitura de QR/RFID (ou digitação manual), botão para fechar a chamada e atalhos para cadastrar rosto/check-in facial.
+- Integração com `EXPO_PUBLIC_API_URL` para apontar para a API (use o IP da máquina ou `host.docker.internal` no Expo Go – não depende mais de ngrok).
+- Dependências Expo relevantes: `expo-notifications` (alertas simulados) e `expo-image-picker` (câmera/galeria para reconhecimento facial).
 
 ### Como rodar
 
@@ -70,6 +71,8 @@ expo start --tunnel
 ```
 
 > Dica: personalize a porta da API exportando `API_PORT`. O padrão é `4000`.
+
+> Para usar o Expo Go na mesma rede sem ngrok, descubra o IP da máquina (ex.: `192.168.0.10`) ou use `host.docker.internal` quando a API estiver em contêiner e defina `EXPO_PUBLIC_API_URL="http://<IP>:4000/api"` antes de rodar `expo start --lan` ou `yarn start:web`.
 
 #### Docker Compose (API + preview web)
 
@@ -147,6 +150,29 @@ Resposta (trecho):
   }
 ]
 ```
+
+### Reconhecimento facial (beta)
+
+1. Cadastre um template facial para um estudante já existente:
+
+```bash
+curl -X POST http://localhost:4000/api/attendance/face/register \
+  -H "Content-Type: application/json" \
+  -d '{
+        "studentId": "stu-001",
+        "imageBase64": "data:image/jpeg;base64,/9j/..."
+      }'
+```
+
+2. Execute o check-in automático enviando apenas a foto capturada na portaria:
+
+```bash
+curl -X POST http://localhost:4000/api/attendance/face/check-in \
+  -H "Content-Type: application/json" \
+  -d '{ "imageBase64": "data:image/jpeg;base64,/9j/..." }'
+```
+
+> A tela **Entrada rápida** do aplicativo traz os botões “Salvar rosto do estudante” (exige o ID digitado) e “Check-in com rosto” para usar esse fluxo sem depender de ngrok.
 
 Consulte `docs/plano-projeto.md` para o diagnóstico completo e `docs/guia-operacional.md` para o passo a passo de configuração.
 
